@@ -1,8 +1,26 @@
 #include "geometry.h"
 #include <glad/glad.h>
 #include <vector>
+#include <unordered_map>
+#include <algorithm>
 
-Geometry::Geometry(const std::vector<float>& vertices)
+std::unordered_map<GLenum, unsigned long> typeSize{{GL_FLOAT,sizeof(float)},
+                                                   {GL_INT,sizeof(int)},
+                                                   {GL_BOOL,sizeof(bool)}};
+
+
+
+unsigned int calculateStride(const std::vector<VertexAttribute>& attributes)
+{
+    unsigned int stride = 0;
+    for (const auto& attribute : attributes)
+    {
+        stride += (attribute.numElements * typeSize[attribute.type]);
+    }
+    return stride;
+}
+
+Geometry::Geometry(const std::vector<float>& data, const std::vector<VertexAttribute>& attributes)
 {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -10,19 +28,25 @@ Geometry::Geometry(const std::vector<float>& vertices)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*data.size(), data.data(), GL_STATIC_DRAW);
 
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    // Declare attribute pointers
+    unsigned int index = 0;
+    unsigned int startingPosition = 0;
+    unsigned int stride = calculateStride(attributes);
+
+    for (const auto& attribute : attributes)
+    {
+        glVertexAttribPointer(index, attribute.numElements, attribute.type, attribute.normalized, stride, (void*)startingPosition);
+        glEnableVertexAttribArray(index);
+
+        index++;
+        startingPosition += (attribute.numElements*typeSize[attribute.type]);
+    }
     
     //unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0); 
-
-    // color attribute
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    // glEnableVertexAttribArray(1);
 }
 
 Geometry::Geometry(const std::vector<float>& vertices, const std::vector<unsigned int>&  indices)

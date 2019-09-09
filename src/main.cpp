@@ -33,27 +33,42 @@ int main()
         return -1;
     }
 
-    std::vector<float> vertices{
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
-    };
-    std::vector<unsigned int> indices{ 
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
-
-    std::vector<float> triangleVertices{
-        -0.5f, -0.5f, 0.0f, // left  
-         0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f  // top   
-    }; 
-
-
     Shader shader("shaders/shader.vs", "shaders/shader.fs");
-    Geometry square(vertices, indices);
-    Geometry triangle(triangleVertices);
+
+
+    // 1 Attributes
+    // std::vector<float> triangleVertices{
+    //     -0.5f, -0.5f, 0.0f, // left  
+    //      0.5f, -0.5f, 0.0f, // right 
+    //      0.0f,  0.5f, 0.0f  // top   
+    // }; 
+    // VertexAttribute vertAttr;
+    // Geometry triangle(triangleVertices, {vertAttr});
+
+
+    // 2 Attributes
+    std::vector<float> triangleVerticesWithColor{
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // left  + red 
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // right + green
+         0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f  // top   + blue
+    }; 
+    VertexAttribute vertAttr, colorAttr;
+    Geometry triangle(triangleVerticesWithColor, {vertAttr, colorAttr});
+
+
+    // Using VBO
+    //     std::vector<float> vertices{
+    //      0.5f,  0.5f, 0.0f,  // top right
+    //      0.5f, -0.5f, 0.0f,  // bottom right
+    //     -0.5f, -0.5f, 0.0f,  // bottom left
+    //     -0.5f,  0.5f, 0.0f   // top left 
+    // };
+    // std::vector<unsigned int> indices{ 
+    //     0, 1, 3,  // first Triangle
+    //     1, 2, 3   // second Triangle
+    // };
+    // Geometry square(vertices, indices);
+
 
     while (!glfwWindowShouldClose(window))
     {

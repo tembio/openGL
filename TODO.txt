@@ -1,0 +1,4 @@
+Como elegir que primitiva pintar
+Como pasar varios vertex attributes
+Como elegir el tipo de draw (static...)
+Cmabiar VertexAttributePointer segun la primitiva, el numero de puntos, y el numero de attributos
