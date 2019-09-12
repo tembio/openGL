@@ -13,11 +13,20 @@ struct VertexAttribute{
 class Geometry{
   public:
     Geometry() = delete;
-    Geometry(const std::vector<float>& data, const std::vector<VertexAttribute>& attributes);
-    Geometry(const std::vector<float>& vertices, const std::vector<unsigned int>&  indices);
-    void draw(const Shader& shader);
+
+    Geometry(const std::vector<float>& data,
+             const std::vector<VertexAttribute>& attributes,
+             GLenum bufferUsageMode = GL_STATIC_DRAW);
+
+    Geometry(const std::vector<float>& data,
+             const std::vector<unsigned int>&  indices,
+             const std::vector<VertexAttribute>& attributes,
+             GLenum bufferUsageMode = GL_STATIC_DRAW);
+
+    void draw(const Shader& shader, GLenum primitiveToDraw = GL_TRIANGLES);
+
     ~Geometry();
   private:
     unsigned int VBO, VAO, EBO=0;
-
+    unsigned int numElementsToDraw;
 };

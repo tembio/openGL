@@ -47,28 +47,28 @@ int main()
 
 
     // 2 Attributes
-    std::vector<float> triangleVerticesWithColor{
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // left  + red 
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // right + green
-         0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f  // top   + blue
-    }; 
+    // std::vector<float> triangleVerticesWithColor{
+    //     -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // left  + red
+    //      0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // right + green
+    //      0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f  // top   + blue
+    // };
+    // VertexAttribute vertAttr, colorAttr;
+    // Geometry triangle(triangleVerticesWithColor, {vertAttr, colorAttr});
+
+
+    // 3 Using VBO
+    std::vector<float> vertices{
+         0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // top right
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f  // top left
+    };
+    std::vector<unsigned int> indices{
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
+    };
     VertexAttribute vertAttr, colorAttr;
-    Geometry triangle(triangleVerticesWithColor, {vertAttr, colorAttr});
-
-
-    // Using VBO
-    //     std::vector<float> vertices{
-    //      0.5f,  0.5f, 0.0f,  // top right
-    //      0.5f, -0.5f, 0.0f,  // bottom right
-    //     -0.5f, -0.5f, 0.0f,  // bottom left
-    //     -0.5f,  0.5f, 0.0f   // top left 
-    // };
-    // std::vector<unsigned int> indices{ 
-    //     0, 1, 3,  // first Triangle
-    //     1, 2, 3   // second Triangle
-    // };
-    // Geometry square(vertices, indices);
-
+    Geometry square(vertices, indices, {vertAttr, colorAttr});
 
     while (!glfwWindowShouldClose(window))
     {
@@ -80,8 +80,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //draw geometry
-        // square.draw(shader);
-        triangle.draw(shader);
+        square.draw(shader);
+        // triangle.draw(shader);
  
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
@@ -92,4 +92,3 @@ int main()
     glfwTerminate();
     return 0;
 }
-
